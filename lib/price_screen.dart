@@ -10,6 +10,20 @@ class PriceScreen extends StatefulWidget {
 }
 
 class _PriceScreenState extends State<PriceScreen> {
+  String pickedCurreny = "IRT";
+  CoinData coinData = CoinData();
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  void getData() async {
+    setState(() {
+      coinData.getCoinData(pickedCurreny);
+    });
+  }
+
   String? selectedCurrency = "USD";
   List<DropdownMenuItem> getDropDownItems() {
     List<DropdownMenuItem> dropDownItems = [];
@@ -56,18 +70,19 @@ class _PriceScreenState extends State<PriceScreen> {
               elevation: 5,
               shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10)),
-              child: const Padding(
-                padding: EdgeInsets.symmetric(vertical: 15, horizontal: 28),
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(vertical: 15, horizontal: 28),
                 child: Text(
-                  "1 BTC = ? USD",
+                  "1 BTC = ? $pickedCurreny",
                   textAlign: TextAlign.center,
-                  style: TextStyle(fontSize: 20, color: Colors.white),
+                  style: const TextStyle(fontSize: 20, color: Colors.white),
                 ),
               ),
             ),
           ),
           Container(
-              height: 150,
+              height: 130,
               color: Colors.lightBlue,
               alignment: Alignment.center,
               child: SizedBox(
@@ -81,7 +96,10 @@ class _PriceScreenState extends State<PriceScreen> {
                     backgroundColor: Colors.lightBlue,
                     itemExtent: 50,
                     onSelectedItemChanged: (selectedIndex) {
-                      print(getPickerItems()[selectedIndex]);
+                      setState(() {
+                        pickedCurreny = currenciesList[selectedIndex];
+                        getData();
+                      });
                     },
                     children: getPickerItems()),
               )),
