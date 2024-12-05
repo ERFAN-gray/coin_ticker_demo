@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:http/http.dart' as http;
 
 const List<String> currenciesList = [
@@ -19,7 +21,6 @@ const List<String> currenciesList = [
   'NZD',
   'PLN',
   'RON',
-  'RUB',
   'SEK',
   'SGD',
   'ZAR'
@@ -36,8 +37,20 @@ const apiKey = '9CB30313-4EAC-4DD4-AB4C-3F4DD69D0210';
 
 class CoinData {
   Future getCoinData(String currency) async {
-    http.Response response =
-        await http.get(Uri.parse("$coinAPIURL/BTC/$currency?apikey=$apiKey"));
-    print(response.body);
+    Map<String, String> cryptoPrices = {};
+    for (String crypto in cryptoList) {
+      http.Response response = await http
+          .get(Uri.parse("$coinAPIURL/$crypto/$currency?apikey=$apiKey"));
+      if (response.statusCode == 200) {
+        var decodedData = jsonDecode(response.body);
+        double lastPrice = decodedData["rate"];
+        cryptoPrices[crypto] = lastPrice.toStringAsFixed(0);
+      } else {
+        // ignore: avoid_print
+        print(response.statusCode);
+        throw " somthing wrong with api";
+      }
+    }
+    return cryptoPrices;
   }
 }
