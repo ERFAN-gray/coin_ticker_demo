@@ -96,7 +96,7 @@ class _PriceScreenState extends State<PriceScreen> {
               color: Colors.lightBlue,
               alignment: Alignment.center,
               child: SizedBox(
-                width: 50,
+                width: 52,
                 child: CupertinoPicker(
                     selectionOverlay:
                         const CupertinoPickerDefaultSelectionOverlay(
